@@ -22,7 +22,7 @@
       background: linear-gradient(135deg, #000000, #000000, #b90404);
       background-attachment: fixed;
       color: var(--text-primary);
-      min-height: 155vh;
+      min-height: 140vh;
       padding-bottom: 20px;
       overflow-x: hidden;
     }
