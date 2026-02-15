@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AirWaves Elite | Pro RGB Visualizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AirWaves India | Indian FM</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   
   <style>
@@ -11,7 +11,10 @@
       --neon: #00f2ff;
       --pink: #ff00cc;
       --bg: #050505;
+      --glass: rgba(255, 255, 255, 0.05);
     }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -19,10 +22,9 @@
       color: white;
       margin: 0;
       overflow-x: hidden;
-      padding-bottom: 120px;
+      padding-bottom: env(safe-area-inset-bottom, 100px);
     }
 
-    /* Professional Background Visualizer */
     #spectrometer {
       position: fixed;
       top: 0;
@@ -30,116 +32,156 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      filter: contrast(1.1); /* Blur hataya gaya stable look ke liye */
-      opacity: 0.7;
+      filter: contrast(1.1);
+      opacity: 0.6;
     }
 
     .container { 
+      width: 92%;
       max-width: 1200px; 
       margin: 0 auto; 
-      padding: 20px; 
       position: relative; 
       z-index: 10; 
     }
 
     header { 
       text-align: center; 
-      padding: 50px 0;
+      padding: 30px 0;
     }
 
     .brand { 
       font-family: 'Orbitron', sans-serif;
-      font-size: 3.5rem; 
+      font-size: clamp(1.8rem, 8vw, 3.2rem); 
       font-weight: 700; 
-      background: linear-gradient(to right, var(--neon), var(--pink), #fbff00);
+      background: linear-gradient(to right, #FF9933, #FFFFFF, #138808); /* Indian Tricolor Gradient */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 10px rgba(0,242,255,0.3));
+      margin: 0;
+    }
+
+    .sub-brand {
+      color: #aaa; 
+      font-size: clamp(0.5rem, 2vw, 0.7rem); 
+      letter-spacing: 3px;
+      margin-top: 5px;
+      text-transform: uppercase;
+      font-weight: bold;
     }
 
     .controls-box {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
+      background: rgba(20, 20, 20, 0.7);
+      backdrop-filter: blur(15px);
       border: 1px solid rgba(255,255,255,0.1);
-      padding: 25px;
-      border-radius: 24px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 2fr;
-      gap: 15px;
-      margin-bottom: 40px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      padding: 15px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    @media (min-width: 768px) {
+      .controls-box {
+        flex-direction: row;
+        padding: 15px 25px;
+        border-radius: 50px;
+      }
+      .controls-box > * { flex: 1; }
     }
 
     select, input {
-      background: rgba(0,0,0,0.6) !important;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.5) !important;
+      border: 1px solid rgba(255,255,255,0.15);
       color: white !important;
-      padding: 15px;
+      padding: 12px 18px;
       border-radius: 12px;
       outline: none;
-      font-size: 0.9rem;
-      transition: 0.3s;
+      font-size: 14px;
+      width: 100%;
     }
 
-    select:focus, input:focus {
-      border-color: var(--neon);
+    @media (min-width: 768px) {
+      select, input { border-radius: 30px; }
     }
 
     .stations-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .stations-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+      }
     }
 
     .station-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 20px;
-      border-radius: 18px;
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 15px;
+      border-radius: 15px;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 90px;
+      text-align: center;
     }
 
-    .station-card:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--neon);
-      transform: translateY(-5px);
+    .station-card:hover { border-color: var(--neon); background: rgba(255,255,255,0.1); }
+    .station-card:active { transform: scale(0.95); }
+
+    .station-card b { 
+      font-size: 0.9rem; 
+      margin-bottom: 5px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
+
+    .station-card small { color: var(--neon); font-size: 0.7rem; font-weight: bold; }
 
     .player-dock {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      background: rgba(10, 10, 10, 0.95);
-      backdrop-filter: blur(30px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 15px 30px;
-      border-radius: 100px;
+      width: 94%;
+      max-width: 500px;
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px 20px;
+      border-radius: 40px;
       display: none;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
       z-index: 1000;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
 
     .play-btn {
       background: linear-gradient(45deg, var(--neon), var(--pink));
       border: none;
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      cursor: pointer;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    @media (max-width: 768px) {
-      .controls-box { grid-template-columns: 1fr; }
-      .brand { font-size: 2.5rem; }
+    #nowPlayingTitle {
+      margin: 0;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   </style>
 </head>
@@ -149,23 +191,23 @@
 
 <div class="container">
   <header>
-    <div class="brand">AIRWAVES<span>.PRO</span></div>
-    <p style="color: #666; font-size: 0.8rem; letter-spacing: 4px;">STABLE RGB AUDIO ENGINE</p>
+    <div class="brand">AIRWAVES.IN</div>
+    <div class="sub-brand">Indian Radio Multiverse</div>
   </header>
 
   <div class="controls-box">
-    <select id="countrySelect">
-      <option value="">Syncing Countries...</option>
-    </select>
     <select id="tagSelect">
-      <option value="">All Genres</option>
-      <option value="bollywood">Bollywood</option>
-      <option value="lofi">Lofi</option>
-      <option value="jazz">Jazz</option>
-      <option value="rock">Rock</option>
-      <option value="edm">EDM</option>
+      <option value="">All Indian Genres</option>
+      <option value="bollywood">Bollywood Hits</option>
+      <option value="hindi">Hindi Classics</option>
+      <option value="punjabi">Punjabi Tadka</option>
+      <option value="tamil">Tamil Hits</option>
+      <option value="telugu">Telugu Radio</option>
+      <option value="malayalam">Malayalam</option>
+      <option value="news">Indian News</option>
+      <option value="devotional">Bhakti Sagar</option>
     </select>
-    <input type="text" id="stationSearch" placeholder="Search station...">
+    <input type="text" id="stationSearch" placeholder="Search Indian stations...">
   </div>
 
   <div class="stations-grid" id="stationsList"></div>
@@ -173,11 +215,11 @@
 
 <div class="player-dock" id="playerDock">
   <button class="play-btn" id="playPauseBtn">
-    <svg id="playIcon" viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="playIcon" viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M8 5v14l11-7z"/></svg>
   </button>
   <div style="flex:1; overflow:hidden;">
-    <h4 id="nowPlayingTitle" style="margin:0; font-size:0.9rem; white-space:nowrap;">Select a Station</h4>
-    <div id="visualizer-status" style="font-size:0.6rem; color: var(--neon); font-weight: bold; letter-spacing: 1px;">ENGINE: STABLE</div>
+    <h4 id="nowPlayingTitle">Select Station</h4>
+    <div style="font-size:0.6rem; color: #FF9933; font-weight: bold;">LIVE FROM INDIA 🇮🇳</div>
   </div>
 </div>
 
@@ -185,7 +227,6 @@
 
 <script>
   const API_SERVERS = ["https://de1.api.radio-browser.info/json", "https://at1.api.radio-browser.info/json"];
-  const countrySelect = document.getElementById("countrySelect");
   const tagSelect = document.getElementById("tagSelect");
   const stationSearch = document.getElementById("stationSearch");
   const stationsList = document.getElementById("stationsList");
@@ -198,15 +239,15 @@
   const ctx = canvas.getContext("2d");
 
   let audioCtx, analyser, dataArray, source;
-  let frequencyData = []; // Stability Buffer
+  let frequencyData = []; 
   let hueOffset = 0;
 
-  window.addEventListener('resize', () => {
+  function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  });
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
 
   async function fetchWithBackup(endpoint) {
     for (let url of API_SERVERS) {
@@ -217,19 +258,7 @@
     }
   }
 
-  async function initApp() {
-    const countries = await fetchWithBackup("/countries");
-    if(countries) {
-      countrySelect.innerHTML = '<option value="">-- Choose Country --</option>';
-      countries.sort((a,b) => b.stationcount - a.stationcount).slice(0, 50).forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.name;
-        opt.textContent = `${c.name}`;
-        countrySelect.appendChild(opt);
-      });
-    }
-  }
-
+  // Visualizer Logic (Professional & Stable)
   function startVisualizer() {
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -237,92 +266,81 @@
     source = audioCtx.createMediaElementSource(audioElement);
     source.connect(analyser);
     analyser.connect(audioCtx.destination);
-    
-    analyser.fftSize = 256; // Reduced for cleaner look
+    analyser.fftSize = 128; 
     dataArray = new Uint8Array(analyser.frequencyBinCount);
     renderFrame();
   }
 
-  // Optimized Render Engine
   function renderFrame() {
     requestAnimationFrame(renderFrame);
     analyser.getByteFrequencyData(dataArray);
 
-    ctx.fillStyle = "rgba(5, 5, 5, 0.15)"; // Minimal trail
+    ctx.fillStyle = "rgba(5, 5, 5, 0.25)"; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const barWidth = (canvas.width / dataArray.length) * 2.5;
+    const barWidth = (canvas.width / dataArray.length) * 2;
     let x = 0;
-    hueOffset += 0.3; 
+    hueOffset += 0.4;
 
     for (let i = 0; i < dataArray.length; i++) {
-      // Physics Smoothing (Prevents flickering)
       if (!frequencyData[i]) frequencyData[i] = 0;
-      if (dataArray[i] < frequencyData[i]) {
-          frequencyData[i] -= 3; // Fall speed
-      } else {
-          frequencyData[i] = dataArray[i]; 
-      }
+      if (dataArray[i] < frequencyData[i]) frequencyData[i] -= 2.8; 
+      else frequencyData[i] = dataArray[i];
 
       const val = frequencyData[i];
-      const percent = val / 255;
-      const height = percent * (canvas.height * 0.7);
-      const hue = (i * 2 + hueOffset) % 360;
+      const height = (val / 255) * (canvas.height * 0.65);
+      const hue = (i * 4 + hueOffset) % 360;
 
-      // Professional Linear Gradient
       const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - height);
-      gradient.addColorStop(0, `hsla(${hue}, 80%, 50%, 0.8)`);
-      gradient.addColorStop(1, `hsla(${hue + 30}, 100%, 60%, 0.1)`);
+      gradient.addColorStop(0, `hsla(${hue}, 85%, 50%, 0.8)`);
+      gradient.addColorStop(1, `hsla(${hue + 40}, 100%, 60%, 0.1)`);
 
       ctx.fillStyle = gradient;
       
-      // Draw Rounded Bars
-      drawRoundedBar(x, canvas.height - height, barWidth - 4, height, 5);
-
+      const r = 6; // Top radius
+      ctx.beginPath();
+      if(height > 0) {
+        ctx.roundRect(x, canvas.height - height, barWidth - 3, height, [r, r, 0, 0]);
+        ctx.fill();
+      }
       x += barWidth;
     }
   }
 
-  function drawRoundedBar(x, y, w, h, r) {
-    if (h < 2) return;
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h);
-    ctx.lineTo(x, y + h);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-    ctx.fill();
-  }
-
+  // Fixed India Search Logic
   async function searchStations() {
-    const country = countrySelect.value;
     const tag = tagSelect.value;
     const search = stationSearch.value;
-    let query = `/stations/search?limit=40&hidebroken=true`;
-    if(country) query += `&country=${encodeURIComponent(country)}`;
+    
+    // Country is locked to India (IN)
+    let query = `/stations/search?limit=100&countrycode=IN&hidebroken=true&order=clickcount&reverse=true`;
+    
     if(tag) query += `&tag=${encodeURIComponent(tag)}`;
     if(search) query += `&name=${encodeURIComponent(search)}`;
 
-    stationsList.innerHTML = "<p>Loading...</p>";
+    stationsList.innerHTML = "<p style='grid-column:1/-1; text-align:center; opacity:0.6;'>Scanning Indian Airwaves...</p>";
     const stations = await fetchWithBackup(query);
     renderStations(stations);
   }
 
   function renderStations(stations) {
     stationsList.innerHTML = "";
-    if(!stations || stations.length === 0) return;
+    if(!stations || stations.length === 0) {
+      stationsList.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No Indian stations found for this search.</p>";
+      return;
+    }
     stations.forEach(s => {
       const card = document.createElement("div");
       card.className = "station-card";
-      card.innerHTML = `<b>${s.name.substring(0, 25)}</b><br><small>${s.bitrate}kbps | ${s.country}</small>`;
+      card.innerHTML = `
+        <b>${s.name.substring(0, 35)}</b>
+        <small>${s.state || 'India'}</small>
+      `;
       card.onclick = () => {
         startVisualizer();
         if (audioCtx.state === 'suspended') audioCtx.resume();
         audioElement.src = s.url_resolved;
-        audioElement.play();
+        audioElement.play().catch(e => alert("Stream not available. Try another!"));
         nowPlayingTitle.textContent = s.name;
         playerDock.style.display = "flex";
         updatePlayIcon(true);
@@ -347,14 +365,14 @@
     }
   };
 
-  countrySelect.onchange = searchStations;
   tagSelect.onchange = searchStations;
   stationSearch.oninput = () => {
     clearTimeout(window.searchTimeout);
-    window.searchTimeout = setTimeout(searchStations, 500);
+    window.searchTimeout = setTimeout(searchStations, 600);
   };
 
-  initApp();
+  // Auto-load India stations on start
+  searchStations();
 </script>
 </body>
 </html>
